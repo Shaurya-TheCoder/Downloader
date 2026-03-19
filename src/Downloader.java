@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -23,6 +24,7 @@ public class Downloader{
             boolean append = false;
             System.out.println("file exists :"+file.exists());
             System.out.println();
+
 
             if(file.exists()){
                 downloadedBytes = file.length();
@@ -97,7 +99,7 @@ public class Downloader{
             System.out.println(e.getMessage());
         }
     }
-    static String createBar(int progress){
+    public static String createBar(int progress){
         int barwidth= 20;
         int filled = (progress*barwidth)/100;
         int empty = barwidth - filled;
@@ -109,5 +111,12 @@ public class Downloader{
         bar.append("]");
 
         return bar.toString();
+    }
+    public static void preAllocateFile(String fileName, long fileSize){
+        try(RandomAccessFile rf = new RandomAccessFile(fileName, "rw")){
+            rf.setLength(fileSize);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
